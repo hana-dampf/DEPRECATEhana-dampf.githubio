@@ -8,7 +8,7 @@ relative_permalinks: true
 title:               Hana Dampf
 tagline:             ''
 description:         'My personal website for sharing fun results with colleagues'
-url:                 http://hana-dampf.github.io
+url:                 http://www.hana-dampf.github.io
 baseurl:             ''
 paginate:            5
 
