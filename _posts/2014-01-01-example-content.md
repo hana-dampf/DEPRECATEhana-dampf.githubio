@@ -1,122 +1,80 @@
 ---
-layout: post
-title: Example content
+layout: page
+title: "Pablo Neural-da: I learn Python by teaching my computer what love is"
+categories: [Python, Machine Learning, Language]
 ---
 
+##Under Construction!
 
-<div class="message">
-  Howdy! This is an example blog post that shows several types of HTML content supported in this theme.
-</div>
+So, how am I spending my free time these days? Very slowly learning Python. Working with natural language processing seemed like a good way to stay humble.
 
-Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. *Aenean eu leo quam.* Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.
+I did this using the [Beautiful Soup library](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) for webscraping, and based my approach on Zach Thoutt's [LSTM model](https://github.com/zackthoutt/got-book-6), rewriting his tensorflow 1.0.0 RNN in keras, with some changes to the embedding structure.
 
-> Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.
+I decided to train my model on a corpus of Pablo Neruda's poems because A) I thought of the Neural-da joke and B) it was comparatively easy to scrape. I was curious about how well a model trained from nothing, using only my corpus, would do at prediction. These are the results I got using entirely Zach Thoutt's code:
 
-Etiam porta **sem malesuada magna** mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.
+  ## After 200 training epochs
+  
+```{r, eval=FALSE, error=FALSE}    
+  oh believed,  
+  colored,  
+  
+  ,  
+  a sky’s line. wounds day hour without back man me  
+  on in, suffocating swaying sea  
+  their  
+  in and you and  
+  blue  
+  wind mouths things  
+  another lives flights the, pain move we and although, and it day  
+  
+  saw let prologue with, centuries  
+  , i  
+  days always  
+  that, knees,,  
+  far, radiance so farewells its wake, me breaking, used in-laws day castro kisses going rocky. flowers  
+  giant  
+  force those, eyes your one and melded. blind fit had  
+  <poembreak> loose  
+  won't in,.; have boil hair the  
 
-## Inline HTML elements
+  true furtive through. what,  
+  and be earth-star  
+  all web of a woman by the,, certain  
+  through dying, the the fathers by for stones, asking secret me newly so secret country  
+  no the certain your glued the immense hearts  
+  room couples a  
+  filled to me men home of the himself was causes it time and! the,, there mine,   
+  
+```
 
-HTML defines a long list of available inline tags, a complete list of which can be found on the [Mozilla Developer Network](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
+The way poems were generated was the clever idea from Zach Thoutt: to first ensure the model could take dynamic-length sequences, meaning I could start a poem from a single seed word then use the model's output probabilities to pick each word, then repeat with the 2 word sequence, and so on. Using the model's output probabilities with the np.random.choice function instead of picking the most likely option injected a degree of randomness (meaning it would not recreate exact passages).
 
-- **To bold text**, use `<strong>`.
-- *To italicize text*, use `<em>`.
-- Abbreviations, like <abbr title="HyperText Markup Langage">HTML</abbr> should use `<abbr>`, with an optional `title` attribute for the full phrase.
-- Citations, like <cite>&mdash; Mark otto</cite>, should use `<cite>`.
-- <del>Deleted</del> text should use `<del>` and <ins>inserted</ins> text should use `<ins>`.
-- Superscript <sup>text</sup> uses `<sup>` and subscript <sub>text</sub> uses `<sub>`.
+My current model was built by first translating the entire text corpus into integers, then training my neural net with sequences of integers in 5 batches. The model takes the sequences through an embedding layer (meant to translate each word into a vector encoded by its relationship with other words) where the weights of the embedding are trained with the model (rather than using an existing trained embedding such as Word2Vec). Next, the embedding vector is passed through 3 LSTM layers returning full sequences (dropout 0.3), then passed to a final Dense prediction layer (with softmax activation). This structure returns the probability for all words in the library being the next word after the input (the outputs were the next words after the sequence coded as 1-hot vectors). 
 
-Most of these elements are styled by browsers with few modifications on our part.
+<details>
 
-## Heading
+<summary>model summary</summary>
+<br>
+<pre>
+  Model: "sequential"
+  _________________________________________________________________
+  Layer (type)                 Output Shape              Param #   
+  =================================================================
+  embedding (Embedding)        (None, None, 512)         2783744   
+  _________________________________________________________________
+  lstm (LSTM)                  (None, None, 512)         2099200   
+  _________________________________________________________________
+  lstm_1 (LSTM)                (None, None, 512)         2099200   
+  _________________________________________________________________
+  lstm_2 (LSTM)                (None, None, 512)         2099200   
+  _________________________________________________________________
+  dense (Dense)                (None, None, 5437)        2789181   
+  =================================================================
+  Total params: 11,870,525
+  Trainable params: 11,870,525
+  Non-trainable params: 0
+  _________________________________________________________________
+</pre> 
+</details>
 
-Vivamus sagittis lacus vel augue rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
-### Code
-
-Cum sociis natoque penatibus et magnis dis `code element` montes, nascetur ridiculus mus.
-
-{% highlight js %}
-// Example can be run directly in your JavaScript console
-
-// Create a function that takes two arguments and returns the sum of those arguments
-var adder = new Function("a", "b", "return a + b");
-
-// Call the function
-adder(2, 6);
-// > 8
-{% endhighlight %}
-
-Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.
-
-### Lists
-
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-
-* Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-* Donec id elit non mi porta gravida at eget metus.
-* Nulla vitae elit libero, a pharetra augue.
-
-Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.
-
-1. Vestibulum id ligula porta felis euismod semper.
-2. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-3. Maecenas sed diam eget risus varius blandit sit amet non magna.
-
-Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.
-
-<dl>
-  <dt>HyperText Markup Language (HTML)</dt>
-  <dd>The language used to describe and define the content of a Web page</dd>
-
-  <dt>Cascading Style Sheets (CSS)</dt>
-  <dd>Used to describe the appearance of Web content</dd>
-
-  <dt>JavaScript (JS)</dt>
-  <dd>The programming language used to build advanced Web sites and applications</dd>
-</dl>
-
-Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam quis risus eget urna mollis ornare vel eu leo.
-
-### Tables
-
-Aenean lacinia bibendum nulla sed consectetur. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Upvotes</th>
-      <th>Downvotes</th>
-    </tr>
-  </thead>
-  <tfoot>
-    <tr>
-      <td>Totals</td>
-      <td>21</td>
-      <td>23</td>
-    </tr>
-  </tfoot>
-  <tbody>
-    <tr>
-      <td>Alice</td>
-      <td>10</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <td>Bob</td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>Charlie</td>
-      <td>7</td>
-      <td>9</td>
-    </tr>
-  </tbody>
-</table>
-
-Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur est at lobortis. Nullam quis risus eget urna mollis ornare vel eu leo.
-
------
-
-Want to see something else added? <a href="https://github.com/poole/poole/issues/new">Open an issue.</a>
+If anyone has some suggestions about how to improve this, let me know! 
