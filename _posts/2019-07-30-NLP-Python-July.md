@@ -17,8 +17,7 @@ I decided to train my model on a corpus of Pablo Neruda's poems because A) I tho
 <summary>After 200 training epochs</summary>
 <pre>
   oh believed,  
-  colored,  
-  
+  colored,  <br>
   ,  
   a sky’s line. wounds day hour without back man me  
   on in, suffocating swaying sea  
@@ -26,8 +25,7 @@ I decided to train my model on a corpus of Pablo Neruda's poems because A) I tho
   in and you and  
   blue  
   wind mouths things  
-  another lives flights the, pain move we and although, and it day  
-  
+  another lives flights the, pain move we and although, and it day  <br>
   saw let prologue with, centuries  
   , i  
   days always  
@@ -36,16 +34,14 @@ I decided to train my model on a corpus of Pablo Neruda's poems because A) I tho
   giant  
   force those, eyes your one and melded. blind fit had  
   <poembreak> loose  
-  won't in,.; have boil hair the  
-
+  won't in,.; have boil hair the  <br>
   true furtive through. what,  
   and be earth-star  
   all web of a woman by the,, certain  
   through dying, the the fathers by for stones, asking secret me newly so secret country  
   no the certain your glued the immense hearts  
   room couples a  
-  filled to me men home of the himself was causes it time and! the,, there mine,
-  
+  filled to me men home of the himself was causes it time and! the,, there mine, <br> 
 </pre>
 </details>
  
